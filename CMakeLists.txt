@@ -6,6 +6,7 @@ set(CMAKE_CXX_STANDARD 26)
 add_library(linkit INTERFACE
     include/linkit/precision.h
     include/linkit/vector3.h
+    include/linkit/linkit.h
 )
 
 target_include_directories(linkit
