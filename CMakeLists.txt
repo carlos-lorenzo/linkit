@@ -4,9 +4,13 @@ project(linkit)
 set(CMAKE_CXX_STANDARD 26)
 
 add_library(linkit INTERFACE
-    include/linkit/precision.h
-    include/linkit/vector3.h
-    include/linkit/linkit.h
+        include/linkit/precision.h
+        include/linkit/vector3.h
+        include/linkit/linkit.h
+        include/linkit/matrix4.h
+        include/linkit/matrix3.h
+        include/linkit/vector4.h
+        include/linkit/utils.h
 )
 
 target_include_directories(linkit

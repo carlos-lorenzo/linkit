@@ -1,9 +1,8 @@
-//
-// Created by carlos on 9/27/25.
-//
-
 #include <iostream>
 
+#include "linkit/matrix3.h"
+#include "linkit/matrix4.h"
+#include "linkit/utils.h"
 #include "linkit/vector3.h"
 
 int main()
@@ -12,9 +11,18 @@ int main()
     auto j = linkit::Vector3(0, 1, 0);
     auto k = linkit::Vector3(0, 0, 1);
 
-    linkit::Vector3 v1 = i + j + 2*k;
-    std::cout << sizeof(linkit::Vector3) << std::endl;
+    linkit::Matrix3 m;
+    linkit::Matrix4 m4;
+    linkit::Vector3 v1;
 
+    v1 = m.rotate(M_PI_2, k) * i;
 
     std::cout << v1.to_string() << std::endl;
+
+    v1 = m.rotate(M_PI_2, k).inverse() * m.rotate(M_PI_2, k) * i;
+    std::cout << v1.to_string() << std::endl;
+
+    std::cout << (linkit::Matrix3::rotate(M_PI_2, k).determinant()) << std::endl;
+
+    std::cout << (linkit::Matrix4::translate(linkit::Vector3(2,1,1))*to_vector4(linkit::Vector3(1,1,1))).to_string() << std::endl;
 }

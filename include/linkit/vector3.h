@@ -1,11 +1,7 @@
-//
-// Created by carlos on 9/24/25.
-//
-
 #ifndef LINKIT_VECTOR3_H
 #define LINKIT_VECTOR3_H
 #include "precision.h"
-#include <string>
+#include "vector4.h"
 
 namespace linkit
 {
@@ -140,6 +136,9 @@ namespace linkit
 
         void operator/= (const real scalar)
         {
+            if (std::abs(scalar) < REAL_EPSILON) {
+                throw std::runtime_error("Division by zero in Vector3::operator/=");
+            }
             x /= scalar;
             y /= scalar;
             z /= scalar;
