@@ -5,6 +5,7 @@
 #ifndef LINKIT_VECTOR3_H
 #define LINKIT_VECTOR3_H
 #include "precision.h"
+#include <string>
 
 namespace linkit
 {
