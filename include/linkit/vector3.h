@@ -137,7 +137,7 @@ namespace linkit
         void operator/= (const real scalar)
         {
             if (std::abs(scalar) < REAL_EPSILON) {
-                throw std::runtime_error("Division by zero in Vector3::operator/=");
+                return; // Avoid division by zero
             }
             x /= scalar;
             y /= scalar;

@@ -142,6 +142,7 @@ namespace linkit
 
         void operator/= (const real scalar)
         {
+            if (std::abs(scalar) < REAL_EPSILON) return;
             x /= scalar;
             y /= scalar;
             z /= scalar;
