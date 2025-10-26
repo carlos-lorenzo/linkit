@@ -36,10 +36,7 @@ namespace linkit
                 );
             }
 
-            void operator*=(const Quaternion &other)
-            {
-                *this = *this * other;
-            }
+
 
 
             void normalize()
@@ -63,6 +60,8 @@ namespace linkit
             }
 
 
+
+
             [[nodiscard]] real angle_radians() const
             {
                 return static_cast<real>(2 * acos(w));
@@ -82,6 +81,11 @@ namespace linkit
             {
                 return "Angle: " + std::to_string(angle_radians()) + ", Axis: " + axis().to_string();
             }
+
+        void operator*=(const Quaternion &other)
+        {
+            *this = *this * other;
+        }
 
 
     };
