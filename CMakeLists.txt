@@ -11,6 +11,7 @@ add_library(linkit INTERFACE
         include/linkit/matrix3.h
         include/linkit/vector4.h
         include/linkit/utils.h
+        include/linkit/quaternion.h
 )
 
 target_include_directories(linkit

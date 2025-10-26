@@ -4,8 +4,9 @@
 
 namespace linkit
 {
-    typedef float real;
+    typedef double real;
     constexpr real REAL_EPSILON = 1e-6;
+    constexpr real PI = static_cast<real>(3.14159265359);
 
     inline real real_sqrt(const real num)
     {
@@ -25,6 +26,16 @@ namespace linkit
     inline real real_cos(const real angle)
     {
         return std::cos(angle);
+    }
+
+    inline real real_acos(const real cosine)
+    {
+        return std::acos(cosine);
+    }
+
+    inline real real_asin(const real sine)
+    {
+        return std::asin(sine);
     }
 
 }
