@@ -13,7 +13,7 @@ namespace linkit
     {
         public:
             real w, x, y, z;
-            Quaternion() : w(0), x(0), y(0), z(0) {};
+            Quaternion() : w(1), x(0), y(0), z(0) {};
             Quaternion(const real w, const real x, const real y, const real z): w(w), x(x), y(y), z(z) {};
             Quaternion(real angle, Vector3 axis)
             {
@@ -41,22 +41,29 @@ namespace linkit
 
             void normalize()
             {
-                const real mag = w*w + x*x + y*y + z*z;
-                if (mag == 0)
+                const real mag_sq = w*w + x*x + y*y + z*z;
+                if (mag_sq > 0)
                 {
-                    w = 1;
-                    return;
+                    const real mag = real_sqrt(mag_sq);
+                    w/=mag;
+                    x/=mag;
+                    y/=mag;
+                    z/=mag;
                 }
-                w/= mag;
-                x/=mag;
-                y/=mag;
-                z/=mag;
+                else
+                {
+                    w = 1; // Reset to identity if it's a zero quaternion
+                }
             }
 
-            void rotate_by_vector(const Vector3& vec)
+            void add_scaled_vector(const Vector3& vec, real scale)
             {
-                const auto q = Quaternion(0, vec.x, vec.y, vec.z);
-                (*this) *= q;
+                Quaternion q(0, vec.x * scale, vec.y * scale, vec.z * scale);
+                q *= *this;
+                w += q.w * 0.5;
+                x += q.x * 0.5;
+                y += q.y * 0.5;
+                z += q.z * 0.5;
             }
 
 
@@ -69,7 +76,13 @@ namespace linkit
 
             [[nodiscard]] Vector3 axis() const
             {
-                return Vector3(x, y, z) / real_sqrt(1 - w*w);
+                real sin_theta_sq = 1.0 - w*w;
+                if (sin_theta_sq <= 0.0)
+                {
+                    return Vector3(0, 0, 1); // Arbitrary axis for no rotation
+                }
+                real one_over_sin_theta = 1.0 / real_sqrt(sin_theta_sq);
+                return Vector3(x * one_over_sin_theta, y * one_over_sin_theta, z * one_over_sin_theta);
             }
 
             [[nodiscard]] std::string to_string() const
