@@ -66,6 +66,32 @@ namespace linkit
                 z += q.z * 0.5;
             }
 
+        // Rotate a vector by this quaternion (assumes this quaternion represents a rotation).
+        // Uses: t = 2 * cross(q.xyz, v); v' = v + w*t + cross(q.xyz, t)
+        [[nodiscard]] Vector3 rotate(const Vector3& v) const
+            {
+                // If you cannot guarantee normalization elsewhere, uncomment:
+                // Quaternion q = *this; q.normalize();
+                // const real qw = q.w, qx = q.x, qy = q.y, qz = q.z;
+
+                const real qw = w, qx = x, qy = y, qz = z;
+
+                // t = 2 * cross(q.xyz, v)
+                const real tx = static_cast<real>(2) * (qy * v.z - qz * v.y);
+                const real ty = static_cast<real>(2) * (qz * v.x - qx * v.z);
+                const real tz = static_cast<real>(2) * (qx * v.y - qy * v.x);
+
+                // cross(q.xyz, t)
+                const real cx = qy * tz - qz * ty;
+                const real cy = qz * tx - qx * tz;
+                const real cz = qx * ty - qy * tx;
+
+                return Vector3(
+                    v.x + qw * tx + cx,
+                    v.y + qw * ty + cy,
+                    v.z + qw * tz + cz
+                );
+            }
 
 
 
