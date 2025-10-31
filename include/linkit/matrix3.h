@@ -206,11 +206,21 @@ namespace linkit
 
         [[nodiscard]] std::string to_string() const {
             std::string s = "[\n";
-            for (int i = 0; i < 3; ++i) {
-                s += "  [" + std::to_string(m[i][0]) + ", " + std::to_string(m[i][1]) + ", " + std::to_string(m[i][2]) + "]\n";
+            for (const auto & i : m) {
+                s += "  [" + std::to_string(i[0]) + ", " + std::to_string(i[1]) + ", " + std::to_string(i[2]) + "]\n";
             }
             s += "]";
             return s;
+        }
+
+        // Changes from current basis to new_base. Useful when converting from world to local space
+        [[nodiscard]] Matrix3 changed_base(const Matrix3 new_base) const {
+            return new_base.inverse() * (*this) * new_base;
+        }
+
+        // Optimisation for changed_base.inverse(). Useful when converting from local to world space
+        [[nodiscard]] Matrix3 inverted_changed_base(const Matrix3 new_base) const {
+            return new_base * (*this) * new_base.inverse();
         }
     };
 
