@@ -229,6 +229,7 @@ namespace linkit
             return result;
         }
 
+
         // Changes from current basis to new_base. Useful when converting from world to local space
         [[nodiscard]] Matrix3 changed_base(const Matrix3 new_base) const {
             return new_base.inverse() * (*this) * new_base;
