@@ -213,6 +213,22 @@ namespace linkit
             return s;
         }
 
+        static Matrix3 matrix_from_columns(const Vector3& col1, const Vector3& col2, const Vector3& col3) {
+            Matrix3 result;
+            result.m[0][0] = col1.x; result.m[0][1] = col2.x; result.m[0][2] = col3.x;
+            result.m[1][0] = col1.y; result.m[1][1] = col2.y; result.m[1][2] = col3.y;
+            result.m[2][0] = col1.z; result.m[2][1] = col2.z; result.m[2][2] = col3.z;
+            return result;
+        }
+
+        static Matrix3 matrix_from_rows(const Vector3& row1, const Vector3& row2, const Vector3& row3) {
+            Matrix3 result;
+            result.m[0][0] = row1.x; result.m[0][1] = row1.y; result.m[0][2] = row1.z;
+            result.m[1][0] = row2.x; result.m[1][1] = row2.y; result.m[1][2] = row2.z;
+            result.m[2][0] = row3.x; result.m[2][1] = row3.y; result.m[2][2] = row3.z;
+            return result;
+        }
+
         // Changes from current basis to new_base. Useful when converting from world to local space
         [[nodiscard]] Matrix3 changed_base(const Matrix3 new_base) const {
             return new_base.inverse() * (*this) * new_base;
