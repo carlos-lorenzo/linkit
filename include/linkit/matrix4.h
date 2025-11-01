@@ -281,7 +281,7 @@ namespace linkit
             Quaternion invOrientation = orientation.conjugate();
             Matrix4 invRotationMatrix(invOrientation.to_matrix3());
 
-            Matrix4 invTranslationMatrix = Matrix4::translate(-position);
+            Matrix4 invTranslationMatrix = Matrix4::translate(-1*position);
 
             // Apply in reverse order: T^-1 * R^-1 * S^-1
             return invScaleMatrix * invRotationMatrix * invTranslationMatrix;
