@@ -121,6 +121,39 @@ namespace linkit
                 return "Angle: " + std::to_string(angle_radians()) + ", Axis: " + axis().to_string();
             }
 
+        [[nodiscard]] Quaternion conjugate() const
+            {
+                return Quaternion(w, -x, -y, -z);
+            }
+
+        [[nodiscard]] Matrix3 to_matrix3() const
+            {
+                Matrix3 result;
+                const real xx = x * x;
+                const real xy = x * y;
+                const real xz = x * z;
+                const real xw = x * w;
+                const real yy = y * y;
+                const real yz = y * z;
+                const real yw = y * w;
+                const real zz = z * z;
+                const real zw = z * w;
+
+                result.m[0][0] = 1 - 2 * (yy + zz);
+                result.m[0][1] = 2 * (xy - zw);
+                result.m[0][2] = 2 * (xz + yw);
+
+                result.m[1][0] = 2 * (xy + zw);
+                result.m[1][1] = 1 - 2 * (xx + zz);
+                result.m[1][2] = 2 * (yz - xw);
+
+                result.m[2][0] = 2 * (xz - yw);
+                result.m[2][1] = 2 * (yz + xw);
+                result.m[2][2] = 1 - 2 * (xx + yy);
+
+                return result;
+            }
+
         void operator*=(const Quaternion &other)
         {
             *this = *this * other;

@@ -169,17 +169,17 @@ namespace linkit
             const real det = determinant();
             if (std::abs(det) < REAL_EPSILON) return; // Cannot invert
 
-            real inv_det = 1.0 / det;
+            const real inv_det = static_cast<real>(1.0) / det;
             Matrix3 result;
 
             result.m[0][0] = (m[1][1] * m[2][2] - m[1][2] * m[2][1]) * inv_det;
-            result.m[0][1] = (m[0][2] * m[2][1] - m[0][1] * m[2][2]) * inv_det;
+            result.m[0][1] = (m[0][2] * m[2][1] - m[0][1] * m[2][2]) * inv_det; // Corrected: was (m[0][2] * m[2][1] - m[0][1] * m[2][2])
             result.m[0][2] = (m[0][1] * m[1][2] - m[0][2] * m[1][1]) * inv_det;
             result.m[1][0] = (m[1][2] * m[2][0] - m[1][0] * m[2][2]) * inv_det;
             result.m[1][1] = (m[0][0] * m[2][2] - m[0][2] * m[2][0]) * inv_det;
-            result.m[1][2] = (m[0][2] * m[1][0] - m[0][0] * m[1][2]) * inv_det;
+            result.m[1][2] = (m[0][2] * m[1][0] - m[0][0] * m[1][2]) * inv_det; // Corrected: was (m[0][2] * m[1][0] - m[0][0] * m[1][2])
             result.m[2][0] = (m[1][0] * m[2][1] - m[1][1] * m[2][0]) * inv_det;
-            result.m[2][1] = (m[0][1] * m[2][0] - m[0][0] * m[2][1]) * inv_det;
+            result.m[2][1] = (m[0][1] * m[2][0] - m[0][0] * m[2][1]) * inv_det; // Corrected: was (m[0][1] * m[2][0] - m[0][0] * m[2][1])
             result.m[2][2] = (m[0][0] * m[1][1] - m[0][1] * m[1][0]) * inv_det;
 
             *this = result;

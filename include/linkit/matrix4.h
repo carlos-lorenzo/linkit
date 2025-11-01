@@ -6,6 +6,8 @@
 #include <string>
 #include <cmath> // For std::abs, sin, cos
 
+#include "quaternion.h"
+
 namespace linkit
 {
     class Matrix4
@@ -23,6 +25,13 @@ namespace linkit
             for (int i = 0; i < 4; ++i)
                 for (int j = 0; j < 4; ++j)
                     m[i][j] = mat[i][j];
+        }
+
+        explicit Matrix4(const Matrix3& mat3) {
+            m[0][0] = mat3.m[0][0]; m[0][1] = mat3.m[0][1]; m[0][2] = mat3.m[0][2]; m[0][3] = 0;
+            m[1][0] = mat3.m[1][0]; m[1][1] = mat3.m[1][1]; m[1][2] = mat3.m[1][2]; m[1][3] = 0;
+            m[2][0] = mat3.m[2][0]; m[2][1] = mat3.m[2][1]; m[2][2] = mat3.m[2][2]; m[2][3] = 0;
+            m[3][0] = 0;           m[3][1] = 0;           m[3][2] = 0;           m[3][3] = 1;
         }
 
         // Transformation matrices
@@ -93,6 +102,12 @@ namespace linkit
                 m[2][0] * other.x + m[2][1] * other.y + m[2][2] * other.z + m[2][3] * other.w,
                 m[3][0] * other.x + m[3][1] * other.y + m[3][2] * other.z + m[3][3] * other.w
             );
+        }
+
+        Vector3 operator* (const Vector3 &other) const {
+            Vector4 vec4(other.x, other.y, other.z, 1.0);
+            Vector4 result = (*this) * vec4;
+            return Vector3(result.x, result.y, result.z);
         }
 
         // Matrix-Scalar operations
@@ -243,6 +258,33 @@ namespace linkit
             }
             s += "]";
             return s;
+        }
+
+        static Matrix4 object_transform_matrix(const Vector3& position, const Quaternion& orientation, const Vector3& scale)
+        {
+            Matrix4 rotationMatrix(orientation.to_matrix3());
+            Matrix4 scaleMatrix = Matrix4::scale(scale);
+            Matrix4 translationMatrix = Matrix4::translate(position);
+
+            return translationMatrix * rotationMatrix * scaleMatrix;
+        }
+
+        static Matrix4 inverse_object_transform_matrix(const Vector3& position, const Quaternion& orientation, const Vector3& scale)
+        {
+            Matrix4 invScaleMatrix = Matrix4::scale(Vector3(
+                (std::abs(scale.x) < REAL_EPSILON) ? 0.0 : static_cast<real>(1.0) / scale.x,
+                (std::abs(scale.y) < REAL_EPSILON) ? 0.0 : static_cast<real>(1.0) / scale.y,
+                (std::abs(scale.z) < REAL_EPSILON) ? 0.0 : static_cast<real>(1.0) / scale.z
+            ));
+
+            // Inverse of a rotation quaternion is its conjugate.
+            Quaternion invOrientation = orientation.conjugate();
+            Matrix4 invRotationMatrix(invOrientation.to_matrix3());
+
+            Matrix4 invTranslationMatrix = Matrix4::translate(-position);
+
+            // Apply in reverse order: T^-1 * R^-1 * S^-1
+            return invScaleMatrix * invRotationMatrix * invTranslationMatrix;
         }
     };
 
