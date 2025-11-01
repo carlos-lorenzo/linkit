@@ -4,6 +4,7 @@
 #include "precision.h"
 #include "vector4.h"
 #include "vector3.h"
+#include "matrix3.h"
 #include <string>
 #include <cmath> // For std::abs, sin, cos
 
